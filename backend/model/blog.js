@@ -18,12 +18,12 @@ const BlogSchema = new mongoose.Schema({
     required:true,
   },
   tags:{
-    type:[String],
-    default:[],
+    type:String
   },
   likes:{
-    type:Number,
-    default:0
+    type:[mongoose.Schema.Types.ObjectId],
+    ref:'User',
+    default:[]
   }
 },{timestamps:true})
 

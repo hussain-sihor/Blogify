@@ -1,6 +1,12 @@
 const express = require("express")
 const router = express.Router()
 const User = require("../model/user")
+const jwt = require("jsonwebtoken")
+
+
+const generateToken = (id)=>{
+  return jwt.sign({id},process.env.JWT_TOKEN,{expiresIn:"1d"})
+ }
 
 const registerUser = async(req,res)=>{
   const {email,name,password} = req.body;
@@ -24,7 +30,9 @@ const registerUser = async(req,res)=>{
       email,
       password,
     });
-    res.status(200).json({"message": newUser});
+
+    const accessToken = jwt.sign(newUser.toJSON(),process.env.JWT_TOKEN)
+    res.json({accessToken:accessToken})
   
 }
 
