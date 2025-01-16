@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Blog = require("../model/blog");
+const User = require("../model/user")
 
 const createBlog = async (req, res) => {
 	const { title, content, author, tags } = req.body;
@@ -31,15 +32,23 @@ const deleteBlog = async (req, res) => {
 
 
 const getBlogs = async (req, res) => {
-	const blogs = await Blog.find();
+	const blogs = await Blog.find().populate({
+		path: "author",
+		model: User,
+		select:"name email"
+	})
 
 	res.status(200).json({ message: blogs });
 };
 
 const getBlog = async (req, res) => {
   var id = req.params.id;
-	const blog = await Blog.findById(id);
-	res.status(200).json({ message: blog });
+	const blog = await Blog.find({author:id}).populate({
+		path: "author",
+		model: User,
+		select:"name email"
+	});
+	res.status(200).json(blog );
 };
 
 const getUserBlogs = async (req, res) => {
@@ -53,9 +62,9 @@ const getUserBlogs = async (req, res) => {
 const updateBlog = async (req, res) => {
 	var id = req.params.id;
 
-	const { title, content, author, tags, likes } = req.body;
+	const { title, content, author, tags } = req.body;
 
-	if (!title || !content || !author || !tags || !likes) {
+	if (!title || !content || !author || !tags) {
 		res.status(400).json({ message: "All fields are required" });
 		return;
 	}
@@ -66,37 +75,12 @@ const updateBlog = async (req, res) => {
 		content,
 		author,
 		tags,
-		likes,
 	});
 
 	const updatedBlog = await Blog.findById(id);
 
 	res.status(200).json({ message: updatedBlog });
 };
-
-
-const updateLikes = async (req, res) => {
-	var id = req.params.id;
-
-	const { userId } = req.body;
-	const blog = await Blog.findById(id);
-
-	const present = blog.likes.includes(userId);
-	if (present) {
-		const updatedList = blog.likes.filter((id) => id != userId);
-		blog.likes = updatedList;
-	} else {
-		blog.likes = [...blog.likes, userId];
-	}
-
-	await Blog.findByIdAndUpdate(id, blog);
-
-	const updatedblog = await Blog.findById(id);
-
-	res.status(200).json({ message: updatedblog });
-};
-
-
 
 
 router.post("/createblog", createBlog);
@@ -111,11 +95,6 @@ router.get("/getblog/:id", getBlog);
 
 router.get("/getuserblogs", getUserBlogs);
 
-router.post("/updatelikes/:id", updateLikes);
-// router.get("/logout",logoutUser)
 
-// router.get("/getuser",authMiddleware , getUser)
-
-// router.get("/checklogin",checkLogin)
 
 module.exports = router;

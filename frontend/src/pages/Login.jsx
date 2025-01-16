@@ -10,22 +10,31 @@ import logo from "../assets/logo.png"
 const LoginForm = () => {
 
 	const navigate = useNavigate();
-
+  
 
 	const [email,setEmail] = useState("");
 	const [password,setPassword] = useState("");
 
+	const toastOptions = {
+		position: "bottom-right",
+		theme: "dark",
+		pauseOnHover: false,
+		draggable: true,
+		autoClose: 4000,
+	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try{
 		const res = await axios.post("http://localhost:3000/api/users/login",{email:email,password:password} )
-		console.log("resppo",res)
+
+		localStorage.setItem("token",res.data.token);
 		if(res.status == 200){
+			toast.success("Sign In Successfully", toastOptions);
 			navigate('/')
 		}
 		}catch(err){
-      console.log(err.response.data.message);
+			toast.error(err.response.data.message, toastOptions);
 		}
 		
 		

@@ -15,18 +15,24 @@ const RegisterForm = () => {
 	const [name,setName] = useState("");
 	const [email,setEmail] = useState("");
 	const [password,setPassword] = useState("");
-
+	const toastOptions = {
+		position: "bottom-right",
+		theme: "dark",
+		pauseOnHover: false,
+		draggable: true,
+		autoClose: 4000,
+	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try{
 		const res = await axios.post("http://localhost:3000/api/users/register",{email:email,password:password,name:name} )
-		console.log("resppo",res)
 		if(res.status == 200){
-			navigate('/')
+			toast.success("User Register Successfully", toastOptions);
+			navigate('/login')
 		}
 		}catch(err){
-      console.log(err.response.data.message);
+			toast.error(err.response.data.message, toastOptions);
 		}
 		
 	};

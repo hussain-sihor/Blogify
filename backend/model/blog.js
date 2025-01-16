@@ -1,5 +1,5 @@
 const mongoose =  require("mongoose")
-
+const User = require("../model/user");
 
 const BlogSchema = new mongoose.Schema({
 
@@ -12,19 +12,12 @@ const BlogSchema = new mongoose.Schema({
     required:true,
   },
   author:{
-    // type:mongoose.Schema.Types.ObjectId,
-    // ref: 'User',
-    type:String,
-    required:true,
+     type: mongoose.Schema.Types.ObjectId, ref: "User" 
   },
   tags:{
     type:String
   },
-  likes:{
-    type:[mongoose.Schema.Types.ObjectId],
-    ref:'User',
-    default:[]
-  }
+ 
 },{timestamps:true})
 
 
