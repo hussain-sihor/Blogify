@@ -14,9 +14,9 @@ Run the command( git clone git@github.com:hussain-sihor/Blogify.git )
 There are two folders (frontend and backend) we need to start both the servers  
 
 
-To start frontend server run ( cd frontend ) and then ( git init ) to install node_modules then run ( npm run dev ) to start development server the react project will start at http://localhost:5173/
+To start frontend server run ( cd frontend ) and then ( npm install ) to install node_modules then run ( npm run dev ) to start development server the react project will start at http://localhost:5173/
 
-To start backend server run ( cd backend ) and then ( git init ) to install node_modules then run ( npm run dev ) to start express server at http://localhost:3000/
+To start backend server run ( cd backend ) and then ( npm install ) to install node_modules then run ( npm run dev ) to start express server at http://localhost:3000/
 
 ### 3) Authentication
 Authenticate with dummy ids or use  
